@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+var OPENER = '"',
+    CLOSER = '"';
+
+function escapeString(string) {
+    return string.replace(/(\r\n|\n|\r)/gm, '\\n').replace(/"/gm, '\\"');
+}
+
+process.stdout.write(OPENER);
+
+process.stdin.on('readable', function() {
+    var chunk = process.stdin.read();
+    if (chunk !== null) {
+        process.stdout.write(escapeString(chunk.toString()));
+    }
+});
+
+process.stdin.on('end', function() {
+    process.stdout.write(CLOSER);
+    process.exit(0);
+});
